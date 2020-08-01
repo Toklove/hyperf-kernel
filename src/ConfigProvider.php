@@ -31,7 +31,7 @@ class ConfigProvider
                 [
                     'id' => 'sms',
                     'description' => 'The config for sms.',
-                    'source' => __DIR__ . '/../publish/consul.php',
+                    'source' => __DIR__ . '/../publish/sms.php',
                     'destination' => BASE_PATH . '/config/autoload/sms.php',
                 ],
             ],
