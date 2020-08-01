@@ -67,6 +67,9 @@ class SMSService
      * @param string $scene 场景
      * @param string $code 验证码
      * @param string $templateCode 短信模板Code
+     * @return string
+     * @throws SMSException
+     * @throws SMSIntervalException
      */
     public function sendVerifyCode(string $phone, string $scene, string $code, string $templateCode)
     {
@@ -86,12 +89,53 @@ class SMSService
             $this->SMSService->sendSMS($phone, $templateCode, Json::encode([
                 'code' => $code
             ]));
-            $this->cache->set($cacheName, [
-                'code'    => $code,
-                'setTime' => time()
-            ]);
+            return $code;
         } catch (InvalidArgumentException $e) {
             throw new SMSException('Failed to send:' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param string $phone
+     * @param string $scene
+     * @param string $code
+     * @return bool
+     */
+    public function checkVerifyCode(string $phone, string $scene, string $code): bool
+    {
+        // 获取缓存
+        $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
+        try {
+            if (!$cache = $this->cache->get($cacheName)) {
+                return false;
+            }
+            if (!isset($cache['code']) || $cache['code'] !== $code) {
+                return false;
+            }
+            return true;
+        } catch (InvalidArgumentException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * 销毁验证码
+     *
+     * @param string $phone
+     * @param string $scene
+     * @return bool
+     */
+    public function destroyVerifyCode(string $phone, string $scene): bool
+    {
+        // 获取缓存
+        $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
+        try {
+            $this->cache->delete($cacheName);
+            return true;
+        } catch (InvalidArgumentException $e) {
+            return false;
         }
     }
 }
