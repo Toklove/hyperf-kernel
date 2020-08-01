@@ -89,6 +89,10 @@ class SMSService
             $this->SMSService->sendSMS($phone, $templateCode, Json::encode([
                 'code' => $code
             ]));
+            $this->cache->set($cacheName, [
+                'code'    => $code,
+                'setTime' => time()
+            ]);
             return $code;
         } catch (InvalidArgumentException $e) {
             throw new SMSException('Failed to send:' . $e->getMessage());
