@@ -73,7 +73,7 @@ class SMSService
         // 获取缓存
         $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
         try {
-            if ($his = $this->cache->get($cacheName, null) !== null) {
+            if (($his = $this->cache->get($cacheName, null)) !== null) {
                 // 是否开启发送频率限制
                 if (($interval = config('sms.common.interval', 0)) > 0) {
                     // 判断发送频率

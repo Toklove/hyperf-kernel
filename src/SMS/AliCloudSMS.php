@@ -89,7 +89,7 @@ class AliCloudSMS implements SMSInterface
                 ->product('Dysmsapi')
                 // ->scheme('https') // https | http
                 ->version('2017-05-25')
-                ->action('AddSmsSign')
+                ->action('SendSms')
                 ->method('POST')
                 ->host($this->host)
                 ->options([
@@ -104,7 +104,7 @@ class AliCloudSMS implements SMSInterface
                 ->request()
                 ->toArray();
             // 判断是否发送失败
-            if (!isset($result['Code']) || $result['Code'] !== 'Code') {
+            if (!isset($result['Code']) || $result['Code'] !== 'OK') {
                 throw new SMSException(sprintf('SMS failed to send, return result: %s', $result['Message'] ?? 'null'));
             }
             return $result;
