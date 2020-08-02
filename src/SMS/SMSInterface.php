@@ -18,6 +18,16 @@ use Zunea\HyperfKernel\SMS\Exception\SMSException;
 interface SMSInterface
 {
     /**
+     * 发送短信验证码
+     *
+     * @param string $phone
+     * @param string $code
+     * @param string $templateCode
+     * @return array
+     */
+    public function sendVerifyCode(string $phone, string $code, string $templateCode): array;
+
+    /**
      * 发送短信
      *
      * @param string $phoneNumber

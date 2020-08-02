@@ -9,7 +9,6 @@ declare (strict_types=1);
 
 namespace Zunea\HyperfKernel\Service;
 
-use Hyperf\Utils\Codec\Json;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -42,15 +41,15 @@ class SMSService
     private $cache;
 
     /**
-     * 构造函数
+     * SMSService constructor.
      *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container  = $container;
-        $this->cache      = $this->container->get(CacheInterface::class);
-        $this->SMSService = $this->container->get(SMSFactory::class)->get();
+        $this->cache      = $container->get(CacheInterface::class);
+        $this->SMSService = $container->get(SMSFactory::class)->get();
     }
 
     /**
@@ -72,7 +71,7 @@ class SMSService
      * @param string $scene 场景
      * @param string $code 验证码
      * @param string $templateCode 短信模板Code
-     * @return string
+     * @return mixed
      * @throws SMSException
      * @throws SMSIntervalException
      */
@@ -91,14 +90,12 @@ class SMSService
                 }
             }
             // 发送验证码
-            $this->SMSService->sendSMS($phone, $templateCode, Json::encode([
-                'code' => $code
-            ]));
+            $result = $this->SMSService->sendVerifyCode($phone, $code, $templateCode);
             $this->cache->set($cacheName, [
                 'code'    => $code,
                 'setTime' => time()
             ], config('sms.expired'));
-            return $code;
+            return $result;
         } catch (InvalidArgumentException $e) {
             throw new SMSException('Failed to send:' . $e->getMessage());
         }

@@ -12,6 +12,9 @@ namespace Zunea\HyperfKernel\SMS;
 use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
+use Hyperf\Contract\ConfigInterface;
+use Hyperf\Utils\Codec\Json;
+use Psr\Container\ContainerInterface;
 use Zunea\HyperfKernel\SMS\Exception\SMSException;
 
 /**
@@ -28,17 +31,24 @@ use Zunea\HyperfKernel\SMS\Exception\SMSException;
 class AliCloudSMS implements SMSInterface
 {
     /**
-     * @var array
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var ConfigInterface
      */
     private $config;
 
     /**
-     * AliCloudSMS constructor.
-     * @param array $config
+     * SMSFactory constructor.
+     *
+     * @param ContainerInterface $container
      */
-    public function __construct(array $config = [])
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->container = $container;
+        $this->config    = $container->get(ConfigInterface::class);
     }
 
     /**
@@ -47,7 +57,23 @@ class AliCloudSMS implements SMSInterface
      */
     public function __get(string $name)
     {
-        return $this->config[$name] ?? null;
+        return $this->config->get('sms.channel.aliCloud.' . $name, null);
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param string $phone
+     * @param string $code
+     * @param string $templateCode
+     * @return array
+     */
+    public function sendVerifyCode(string $phone, string $code, string $templateCode): array
+    {
+        $content = Json::encode([
+            'code' => $code
+        ]);
+        return $this->sendSMS($phone, $templateCode, $content);
     }
 
     /**

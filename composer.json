@@ -24,6 +24,7 @@
     "require": {
         "php": ">=7.2",
         "ext-swoole": ">=4.5",
+        "hyperf/guzzle": "^2.0",
         "alibabacloud/client": "^1.5",
         "hyperf/cache": "^2.0",
         "hyperf/config": "^2.0",

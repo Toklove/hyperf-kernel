@@ -9,6 +9,7 @@ declare (strict_types=1);
 
 namespace Zunea\HyperfKernel\SMS;
 
+use Hyperf\Contract\ConfigInterface;
 use Psr\Container\ContainerInterface;
 use Zunea\HyperfKernel\SMS\Exception\SMSException;
 
@@ -26,13 +27,19 @@ class SMSFactory
     private $container;
 
     /**
-     * 构造函数
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * SMSFactory constructor.
      *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->config    = $container->get(ConfigInterface::class);
     }
 
     /**
@@ -41,13 +48,14 @@ class SMSFactory
      */
     public function get(string $channel = null): ?SMSInterface
     {
-        $channel  = $channel === null ? config('sms.default') : $channel;
-        $channels = config('sms.channel', []);
+        $channel  = $channel === null ? $this->config->get('sms.default') : $channel;
+        $channels = $this->config->get('sms.channel', []);
         if (!isset($channels[$channel])) {
             throw new SMSException(sprintf('SMS driver [%s] does not exist', $channel));
         }
-        return make($channels[$channel]['driver'], [
-            'config' => $channels[$channel]
-        ]);
+        if (!class_exists($channels[$channel]['driver'])) {
+            throw new SMSException(sprintf('[Error] class %s is invalid.', $channels[$channel]['driver']));
+        }
+        return $this->container->get($channels[$channel]['driver']);
     }
 }

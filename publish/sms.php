@@ -20,9 +20,14 @@ return [
             'driver'       => \Zunea\HyperfKernel\SMS\AliCloudSMS::class,
             'accessKeyId'  => env('aliCloudAccessKeyId', ''),
             'accessSecret' => env('aliCloudAccessSecret', ''),
-            'regionId'     => env('aliCloudRegionId', 'cn-hangzhou'),
-            'host'         => env('aliCloudHost', 'dysmsapi.aliyuncs.com'),
-            'signName'     => env('aliCloudSignName', '')
+            'regionId'     => env('aliCloudSMSRegionId', 'cn-hangzhou'),
+            'host'         => env('aliCloudSMSHost', 'dysmsapi.aliyuncs.com'),
+            'signName'     => env('aliCloudSMSSignName', '')
+        ],
+        // 聚合短信配置
+        'juhe'     => [
+            'driver' => \Zunea\HyperfKernel\SMS\JuheSMS::class,
+            'key'    => env('juheSMSKey', ''),
         ]
     ]
 ];
