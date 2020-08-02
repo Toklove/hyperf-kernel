@@ -14,6 +14,7 @@ use Hyperf\Guzzle\ClientFactory;
 use Hyperf\Utils\Codec\Json;
 use Psr\Container\ContainerInterface;
 use Zunea\HyperfKernel\SMS\Exception\SMSException;
+use Exception;
 
 /**
  * 聚合数据短信服务
@@ -49,7 +50,7 @@ class JuheSMS implements SMSInterface
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container, ClientFactory $clientFactory)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->config    = $container->get(ConfigInterface::class);
@@ -109,7 +110,7 @@ class JuheSMS implements SMSInterface
                 throw new SMSException(sprintf('SMS failed to send, return result: %s', $responseContents));
             }
             return $result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new SMSException(sprintf('ServerException: %s', $e->getMessage()), $e->getCode());
         }
     }
