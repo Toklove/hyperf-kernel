@@ -17,56 +17,37 @@ use Zunea\HyperfKernel\SMS\Exception\SMSException;
 /**
  * 阿里云短信服务
  *
+ * @property string $accessKeyId
+ * @property string $accessSecret
+ * @property string $regionId
+ * @property string $host
+ * @property string $signName
  * @author 刘兴永(aile8880@qq.com)
  * @package Zunea\HyperfKernel\SMS
  */
 class AliCloudSMS implements SMSInterface
 {
     /**
-     * 应用ID
-     *
-     * @var string
+     * @var array
      */
-    private $accessKeyId;
-
-    /**
-     * 应用秘钥
-     *
-     * @var string
-     */
-    private $accessSecret;
-
-    /**
-     * 地域
-     *
-     * @var string
-     */
-    private $regionId;
-
-    /**
-     * 请求节点
-     *
-     * @var string
-     */
-    private $host;
-
-    /**
-     * 短信前缀
-     *
-     * @var string
-     */
-    private $signName;
+    private $config;
 
     /**
      * AliCloudSMS constructor.
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config = [])
     {
-        $this->accessKeyId  = config('sms.aliCloud.accessKeyId');
-        $this->accessSecret = config('sms.aliCloud.accessSecret');
-        $this->regionId     = config('sms.aliCloud.regionId');
-        $this->host         = config('sms.aliCloud.host');
-        $this->signName     = config('sms.aliCloud.signName');
+        $this->config = $config;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public function __get(string $name)
+    {
+        return $this->config[$name] ?? null;
     }
 
     /**

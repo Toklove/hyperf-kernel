@@ -10,6 +10,7 @@ declare (strict_types=1);
 namespace Zunea\HyperfKernel\SMS;
 
 use Psr\Container\ContainerInterface;
+use Zunea\HyperfKernel\SMS\Exception\SMSException;
 
 /**
  * 短信工厂
@@ -35,12 +36,18 @@ class SMSFactory
     }
 
     /**
-     * 阿里云短信服务
-     *
-     * @return SMSInterface
+     * @param string|null $channel
+     * @return mixed
      */
-    public function getAliCloudSMS(): SMSInterface
+    public function get(string $channel = null): ?SMSInterface
     {
-        return $this->container->get(AliCloudSMS::class);
+        $channel  = $channel === null ? config('sms.default') : $channel;
+        $channels = config('sms.channel', []);
+        if (!isset($channels[$channel])) {
+            throw new SMSException(sprintf('SMS driver [%s] does not exist', $channel));
+        }
+        return make($channels[$channel]['driver'], [
+            'config' => $channels[$channel]
+        ]);
     }
 }

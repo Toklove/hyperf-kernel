@@ -27,13 +27,6 @@ use Zunea\HyperfKernel\SMS\SMSInterface;
 class SMSService
 {
     /**
-     * 短信验证码存储名字
-     *
-     * @var string
-     */
-    const CACHE_NAME = 'SMSVerifyCode:%s:%s';
-
-    /**
      * @var ContainerInterface
      */
     private $container;
@@ -56,8 +49,20 @@ class SMSService
     public function __construct(ContainerInterface $container)
     {
         $this->container  = $container;
-        $this->SMSService = $this->container->get(SMSFactory::class)->getAliCloudSMS();
         $this->cache      = $this->container->get(CacheInterface::class);
+        $this->SMSService = $this->container->get(SMSFactory::class)->get();
+    }
+
+    /**
+     * 设置发送渠道
+     *
+     * @param string|null $channel
+     * @return $this
+     */
+    public function setChannel(string $channel = null): self
+    {
+        $this->SMSService = $this->container->get(SMSFactory::class)->get($channel);
+        return $this;
     }
 
     /**
@@ -74,11 +79,11 @@ class SMSService
     public function sendVerifyCode(string $phone, string $scene, string $code, string $templateCode)
     {
         // 获取缓存
-        $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
+        $cacheName = sprintf(config('sms.verify_code_cache'), $scene, $phone);
         try {
             if (($his = $this->cache->get($cacheName, null)) !== null) {
                 // 是否开启发送频率限制
-                if (($interval = config('sms.common.interval', 0)) > 0) {
+                if (($interval = config('sms.interval', 0)) > 0) {
                     // 判断发送频率
                     if (isset($his['setTime']) && $his['setTime'] + $interval > time()) {
                         throw new SMSIntervalException('SMS is sent too frequently');
@@ -92,7 +97,7 @@ class SMSService
             $this->cache->set($cacheName, [
                 'code'    => $code,
                 'setTime' => time()
-            ]);
+            ], config('sms.expired'));
             return $code;
         } catch (InvalidArgumentException $e) {
             throw new SMSException('Failed to send:' . $e->getMessage());
@@ -110,7 +115,7 @@ class SMSService
     public function checkVerifyCode(string $phone, string $scene, string $code): bool
     {
         // 获取缓存
-        $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
+        $cacheName = sprintf(config('sms.verify_code_cache'), $scene, $phone);
         try {
             if (!$cache = $this->cache->get($cacheName)) {
                 return false;
@@ -134,7 +139,7 @@ class SMSService
     public function destroyVerifyCode(string $phone, string $scene): bool
     {
         // 获取缓存
-        $cacheName = sprintf(self::CACHE_NAME, $scene, $phone);
+        $cacheName = sprintf(config('sms.verify_code_cache'), $scene, $phone);
         try {
             $this->cache->delete($cacheName);
             return true;
