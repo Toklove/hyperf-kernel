@@ -33,7 +33,7 @@ class SMSService
     /**
      * @var SMSInterface
      */
-    private $SMSService;
+    private $SMSFactory;
 
     /**
      * @var CacheInterface
@@ -49,7 +49,7 @@ class SMSService
     {
         $this->container  = $container;
         $this->cache      = $container->get(CacheInterface::class);
-        $this->SMSService = $container->get(SMSFactory::class)->get();
+        $this->SMSFactory = $container->get(SMSFactory::class)->get();
     }
 
     /**
@@ -60,7 +60,7 @@ class SMSService
      */
     public function setChannel(string $channel = null): self
     {
-        $this->SMSService = $this->container->get(SMSFactory::class)->get($channel);
+        $this->SMSFactory = $this->container->get(SMSFactory::class)->get($channel);
         return $this;
     }
 
@@ -90,7 +90,7 @@ class SMSService
                 }
             }
             // 发送验证码
-            $result = $this->SMSService->sendVerifyCode($phone, $code, $templateCode);
+            $result = $this->SMSFactory->sendVerifyCode($phone, $code, $templateCode);
             $this->cache->set($cacheName, [
                 'code'    => $code,
                 'setTime' => time()
@@ -143,5 +143,18 @@ class SMSService
         } catch (InvalidArgumentException $e) {
             return false;
         }
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param string $phone
+     * @param string $templateCode
+     * @param string $content
+     * @return array
+     */
+    public function sendSMS(string $phone, string $templateCode, string $content): array
+    {
+        return $this->SMSFactory->sendSMS($phone, $templateCode, $content);
     }
 }
