@@ -7,12 +7,12 @@ declare (strict_types=1);
  * @link https://dayiguo.com
  */
 
-namespace Zunea\HyperfKernel\SMS\Exception;
+namespace TokLove\HyperfKernel\SMS\Exception;
 /**
  * SMSException
  *
  * @author 刘兴永(aile8880@qq.com)
- * @package Zunea\HyperfKernel\Exception
+ * @package TokLove\HyperfKernel\Exception
  */
 class SMSException extends \RuntimeException
 {

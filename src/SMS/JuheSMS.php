@@ -7,13 +7,13 @@ declare (strict_types=1);
  * @link https://dayiguo.com
  */
 
-namespace Zunea\HyperfKernel\SMS;
+namespace TokLove\HyperfKernel\SMS;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Guzzle\ClientFactory;
 use Hyperf\Utils\Codec\Json;
 use Psr\Container\ContainerInterface;
-use Zunea\HyperfKernel\SMS\Exception\SMSException;
+use TokLove\HyperfKernel\SMS\Exception\SMSException;
 use Exception;
 
 /**
@@ -21,7 +21,7 @@ use Exception;
  *
  * @property string $key
  * @author 刘兴永(aile8880@qq.com)
- * @package Zunea\HyperfKernel\SMS
+ * @package TokLove\HyperfKernel\SMS
  */
 class JuheSMS implements SMSInterface
 {

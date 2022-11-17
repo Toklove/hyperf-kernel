@@ -17,7 +17,7 @@ return [
     'channel'           => [
         // 阿里云短信配置
         'aliCloud' => [
-            'driver'       => \Zunea\HyperfKernel\SMS\AliCloudSMS::class,
+            'driver'       => \TokLove\HyperfKernel\SMS\AliCloudSMS::class,
             'accessKeyId'  => env('aliCloudAccessKeyId', ''),
             'accessSecret' => env('aliCloudAccessSecret', ''),
             'regionId'     => env('aliCloudSMSRegionId', 'cn-hangzhou'),
@@ -26,7 +26,7 @@ return [
         ],
         // 聚合短信配置
         'juhe'     => [
-            'driver' => \Zunea\HyperfKernel\SMS\JuheSMS::class,
+            'driver' => \TokLove\HyperfKernel\SMS\JuheSMS::class,
             'key'    => env('juheSMSKey', ''),
         ]
     ]

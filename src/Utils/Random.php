@@ -7,12 +7,12 @@ declare (strict_types=1);
  * @link https://dayiguo.com
  */
 
-namespace Zunea\HyperfKernel\Utils;
+namespace TokLove\HyperfKernel\Utils;
 /**
  * 随机码生成
  *
  * @author 刘兴永(aile8880@qq.com)
- * @package Zunea\HyperfKernel\Utils
+ * @package TokLove\HyperfKernel\Utils
  */
 class Random
 {

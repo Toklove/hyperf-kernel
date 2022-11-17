@@ -7,21 +7,21 @@ declare (strict_types=1);
  * @link https://dayiguo.com
  */
 
-namespace Zunea\HyperfKernel\Service;
+namespace TokLove\HyperfKernel\Service;
 
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
-use Zunea\HyperfKernel\SMS\Exception\SMSException;
-use Zunea\HyperfKernel\SMS\Exception\SMSIntervalException;
-use Zunea\HyperfKernel\SMS\SMSFactory;
-use Zunea\HyperfKernel\SMS\SMSInterface;
+use TokLove\HyperfKernel\SMS\Exception\SMSException;
+use TokLove\HyperfKernel\SMS\Exception\SMSIntervalException;
+use TokLove\HyperfKernel\SMS\SMSFactory;
+use TokLove\HyperfKernel\SMS\SMSInterface;
 
 /**
  * 短信服务
  *
  * @author 刘兴永(aile8880@qq.com)
- * @package Zunea\HyperfKernel\Service
+ * @package TokLove\HyperfKernel\Service
  */
 class SMSService
 {

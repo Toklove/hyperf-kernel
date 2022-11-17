@@ -5,15 +5,15 @@
  * @link https://dayiguo.com
  */
 
-namespace Zunea\HyperfKernel\SMS;
+namespace TokLove\HyperfKernel\SMS;
 
-use Zunea\HyperfKernel\SMS\Exception\SMSException;
+use TokLove\HyperfKernel\SMS\Exception\SMSException;
 
 /**
  * 短信工厂抽象类
  *
  * @author 刘兴永(aile8880@qq.com)
- * @package Zunea\HyperfKernel\SMS
+ * @package TokLove\HyperfKernel\SMS
  */
 interface SMSInterface
 {

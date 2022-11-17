@@ -1,16 +1,16 @@
 {
-    "name": "zunea/hyperf-kernel",
+    "name": "toklove/hyperf-kernel",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "php",
         "hyperf",
-        "Zunea"
+        "TokLove"
     ],
     "description": "",
     "autoload": {
         "psr-4": {
-            "Zunea\\HyperfKernel\\": "src/"
+            "TokLove\\HyperfKernel\\": "src/"
         },
         "files": [
             "src/functions.php"
@@ -48,7 +48,7 @@
     },
     "extra": {
         "hyperf": {
-            "config": "Zunea\\HyperfKernel\\ConfigProvider"
+            "config": "TokLove\\HyperfKernel\\ConfigProvider"
         }
     }
 }
